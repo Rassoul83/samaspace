@@ -3,15 +3,13 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
-// Remplace ces valeurs par celles de ton projet Firebase
-// (Console Firebase > Parametres du projet > Vos applications)
 const firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "samaspace.firebaseapp.com",
-  projectId: "samaspace",
-  storageBucket: "samaspace.appspot.com",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME",
+  apiKey: "AIzaSyAGbofAEEeNS-4uK0bogOby4DvQ0qF4Y2M",
+  authDomain: "samaspace-97457.firebaseapp.com",
+  projectId: "samaspace-97457",
+  storageBucket: "samaspace-97457.firebasestorage.app",
+  messagingSenderId: "110238022287",
+  appId: "1:110238022287:web:1073744ad05e037e144efa",
 };
 
 export const app = initializeApp(firebaseConfig);
