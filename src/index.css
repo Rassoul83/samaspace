@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-sable text-encre font-sans antialiased;
+  }
+  h1, h2, h3, h4 { @apply font-display; }
+  :focus-visible {
+    outline: 2px solid #14213D;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm px-5 py-2.5 font-medium text-sm transition-colors duration-150;
+  }
+  .btn-primary {
+    @apply btn bg-nuit text-sable hover:bg-nuit-600;
+  }
+  .btn-accent {
+    @apply btn bg-ocre text-nuit-900 hover:bg-ocre-600;
+  }
+  .btn-outline {
+    @apply btn border border-nuit/20 text-nuit hover:bg-nuit/5;
+  }
+  .btn-ghost {
+    @apply btn text-nuit hover:bg-nuit/5;
+  }
+  .card {
+    @apply bg-sable-100 border border-nuit/10 rounded-lg;
+  }
+  .input {
+    @apply w-full rounded-sm border border-nuit/15 bg-sable-100 px-3 py-2.5 text-sm text-encre placeholder:text-encre/40 focus:border-nuit/40 outline-none transition-colors;
+  }
+  .label {
+    @apply block text-xs font-medium uppercase tracking-wide text-nuit-400 mb-1.5;
+  }
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-atlan-600;
+  }
+  .container-page {
+    @apply max-w-7xl mx-auto px-5 sm:px-8;
+  }
+}
+
+.bg-loom {
+  background-image:
+    linear-gradient(135deg, rgba(232,163,61,0.14) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(232,163,61,0.14) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(15,110,110,0.10) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(15,110,110,0.10) 25%, transparent 25%);
+  background-position: 20px 0, 20px 0, 0 0, 0 0;
+  background-size: 40px 40px;
+  background-repeat: repeat;
+}

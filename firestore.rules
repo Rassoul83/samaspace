@@ -1,0 +1,39 @@
+rules_version = "2";
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function estConnecte() {
+      return request.auth != null;
+    }
+    function estProprio(id) {
+      return estConnecte() && request.auth.uid == id;
+    }
+
+    // Profils utilisateurs
+    match /utilisateurs/{uid} {
+      allow read: if estProprio(uid);
+      allow create: if estProprio(uid);
+      allow update: if estProprio(uid);
+    }
+
+    // Espaces : lecture publique, écriture réservée au propriétaire de la fiche
+    match /espaces/{espaceId} {
+      allow read: if true;
+      allow create: if estConnecte() && request.resource.data.proprietaireId == request.auth.uid;
+      allow update, delete: if estConnecte() && resource.data.proprietaireId == request.auth.uid;
+    }
+
+    // Réservations : visibles par le client et le propriétaire concernés
+    match /reservations/{resaId} {
+      allow read: if estConnecte() && (resource.data.clientId == request.auth.uid || resource.data.proprietaireId == request.auth.uid);
+      allow create: if estConnecte() && request.resource.data.clientId == request.auth.uid;
+      allow update: if estConnecte() && resource.data.proprietaireId == request.auth.uid;
+    }
+
+    // Avis : lecture publique, création réservée à un client connecté
+    match /avis/{avisId} {
+      allow read: if true;
+      allow create: if estConnecte() && request.resource.data.auteurId == request.auth.uid;
+    }
+  }
+}
