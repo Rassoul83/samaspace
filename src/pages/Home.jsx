@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ShieldCheck, SlidersHorizontal, MessagesSquare, ArrowRight } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import SpaceCard from "../components/SpaceCard";
+import HeroSlider from "../components/HeroSlider";
 import { listSpaces } from "../firebase/spaces";
 import { MOCK_SPACES } from "../data/mockSpaces";
 
@@ -35,20 +36,20 @@ export default function Home() {
 
   return (
     <div>
-      <section className="bg-loom border-b border-nuit/10">
-        <div className="container-page py-16 md:py-24">
-          <p className="eyebrow mb-4">Dakar · Saly — bientôt tout le Sénégal</p>
-          <h1 className="text-4xl md:text-6xl font-display text-nuit max-w-3xl leading-[1.1]">
-            Trouvez, comparez et réservez <span className="italic text-atlan-600">le bon espace</span>, au bon moment.
+      <HeroSlider>
+        <div className="container-page py-16 pb-24 md:py-24 md:pb-28">
+          <p className="eyebrow text-ocre mb-4">Dakar · Saly — bientôt tout le Sénégal</p>
+          <h1 className="text-4xl md:text-6xl font-display text-sable max-w-3xl leading-[1.1]">
+            Trouvez, comparez et réservez <span className="italic text-ocre-400">le bon espace</span>, au bon moment.
           </h1>
-          <p className="mt-5 text-encre/70 max-w-xl text-lg">
+          <p className="mt-5 text-sable/75 max-w-xl text-lg">
             La marketplace sénégalaise dédiée aux salles de réunion, formation, séminaires et événements — pas un simple annuaire.
           </p>
           <div className="mt-8">
             <SearchBar />
           </div>
         </div>
-      </section>
+      </HeroSlider>
 
       <section className="container-page py-16 grid md:grid-cols-3 gap-6">
         {PILIERS.map((p) => (
