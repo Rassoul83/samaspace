@@ -24,6 +24,7 @@ export default function Inscription() {
 
   return (
     <div className="container-page py-16 max-w-md">
+      <img src="/samaspace-logo-full.png" alt="SamaSpace" className="h-10 w-auto mb-8" />
       <h1 className="text-3xl font-display text-nuit mb-2">Créer un compte</h1>
       <p className="text-encre/60 mb-6">Client à la recherche d\un espace, ou propriétaire souhaitant en publier un ?</p>
 

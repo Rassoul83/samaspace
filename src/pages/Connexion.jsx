@@ -21,6 +21,7 @@ export default function Connexion() {
 
   return (
     <div className="container-page py-16 max-w-md">
+      <img src="/samaspace-logo-full.png" alt="SamaSpace" className="h-10 w-auto mb-8" />
       <h1 className="text-3xl font-display text-nuit mb-2">Connexion</h1>
       <p className="text-encre/60 mb-8">Accédez à votre espace client ou propriétaire.</p>
       <form onSubmit={handleSubmit} className="card p-6 space-y-4">
