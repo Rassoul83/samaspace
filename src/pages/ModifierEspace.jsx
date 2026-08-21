@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ImagePlus, X, Loader2 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { getSpace, updateSpace } from "../firebase/spaces";
+import { uploadImage } from "../lib/cloudinary";
 import { VILLES, ACTIVITES, EQUIPEMENTS } from "../data/villes";
 
 export default function ModifierEspace() {
@@ -10,6 +12,7 @@ export default function ModifierEspace() {
   const navigate = useNavigate();
   const [form, setForm] = useState(null);
   const [envoi, setEnvoi] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     getSpace(id)
@@ -26,10 +29,28 @@ export default function ModifierEspace() {
           prixJournee: s.prixJournee ?? "",
           activites: s.activites || [],
           equipements: s.equipements || [],
+          photos: s.photos || (s.image ? [s.image] : []),
         });
       })
       .catch(() => navigate("/espace-proprietaire"));
   }, [id, navigate]);
+
+  async function handlePhotos(e) {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    setUploading(true);
+    try {
+      const urls = await Promise.all(files.map(uploadImage));
+      setForm((f) => ({ ...f, photos: [...f.photos, ...urls] }));
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  }
+
+  function retirerPhoto(index) {
+    setForm((f) => ({ ...f, photos: f.photos.filter((_, i) => i !== index) }));
+  }
 
   function toggleListe(champ, valeur) {
     const set = new Set(form[champ]);
@@ -46,6 +67,7 @@ export default function ModifierEspace() {
         capacite: Number(form.capacite),
         prixHeure: Number(form.prixHeure),
         prixJournee: Number(form.prixJournee),
+        image: form.photos[0] || "",
       });
       navigate("/espace-proprietaire");
     } catch {
@@ -129,7 +151,38 @@ export default function ModifierEspace() {
           </div>
         </div>
 
-        <button type="submit" disabled={envoi} className="btn-accent w-full">
+        <div>
+          <label className="label">Photos de l'espace</label>
+          <label className={`flex items-center gap-2 cursor-pointer w-fit px-4 py-2.5 rounded-sm border border-dashed border-nuit/25 text-sm text-encre/60 hover:border-nuit/50 hover:text-encre transition-colors ${uploading ? "opacity-50 pointer-events-none" : ""}`}>
+            {uploading ? <Loader2 size={16} className="animate-spin" /> : <ImagePlus size={16} />}
+            {uploading ? "Upload en cours…" : "Ajouter des photos"}
+            <input type="file" accept="image/*" multiple className="hidden" onChange={handlePhotos} disabled={uploading} />
+          </label>
+          {form.photos.length > 0 && (
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mt-3">
+              {form.photos.map((url, i) => (
+                <div key={url} className="relative group aspect-video rounded-sm overflow-hidden">
+                  <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => retirerPhoto(i)}
+                    className="absolute top-1 right-1 bg-nuit/70 text-sable rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label="Retirer cette photo"
+                  >
+                    <X size={12} />
+                  </button>
+                  {i === 0 && (
+                    <span className="absolute bottom-1 left-1 text-[10px] bg-ocre text-nuit-900 px-1.5 py-0.5 rounded-full font-mono">
+                      principale
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <button type="submit" disabled={envoi || uploading} className="btn-accent w-full">
           {envoi ? "Enregistrement…" : "Enregistrer les modifications"}
         </button>
       </form>

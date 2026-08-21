@@ -18,11 +18,20 @@ export default function EspaceDetail() {
   const [reviews, setReviews] = useState([]);
   const [form, setForm] = useState({ date: "", heureDebut: "", duree: "2", participants: "" });
   const [statut, setStatut] = useState(null);
+  const [photoActive, setPhotoActive] = useState(null);
 
   useEffect(() => {
     getSpace(id)
-      .then((s) => setSpace(s || MOCK_SPACES.find((m) => m.id === id) || MOCK_SPACES[0]))
-      .catch(() => setSpace(MOCK_SPACES.find((m) => m.id === id) || MOCK_SPACES[0]));
+      .then((s) => {
+        const resolved = s || MOCK_SPACES.find((m) => m.id === id) || MOCK_SPACES[0];
+        setSpace(resolved);
+        setPhotoActive(resolved.photos?.[0] || resolved.image || null);
+      })
+      .catch(() => {
+        const fallback = MOCK_SPACES.find((m) => m.id === id) || MOCK_SPACES[0];
+        setSpace(fallback);
+        setPhotoActive(fallback.photos?.[0] || fallback.image || null);
+      });
     listReviewsBySpace(id).then(setReviews).catch(() => setReviews([]));
   }, [id]);
 
@@ -49,11 +58,11 @@ export default function EspaceDetail() {
     <div className="container-page py-10">
       <div className="grid lg:grid-cols-[1fr_360px] gap-10">
         <div>
-          <div className="relative h-72 rounded-lg overflow-hidden mb-6 flex items-end p-6">
-            {space.image ? (
+          <div className="relative h-72 rounded-lg overflow-hidden mb-3 flex items-end p-6">
+            {photoActive ? (
               <>
                 <img
-                  src={space.image}
+                  src={photoActive}
                   alt={space.nom}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -68,6 +77,23 @@ export default function EspaceDetail() {
               </div>
             )}
           </div>
+
+          {(space.photos?.length > 1) && (
+            <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
+              {space.photos.map((url, i) => (
+                <button
+                  key={url}
+                  type="button"
+                  onClick={() => setPhotoActive(url)}
+                  className={`shrink-0 h-16 w-24 rounded-sm overflow-hidden border-2 transition-colors ${
+                    url === photoActive ? "border-nuit" : "border-transparent opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <img src={url} alt={`Vue ${i + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-start justify-between gap-4 mb-1">
             <h1 className="text-3xl font-display text-nuit">{space.nom}</h1>

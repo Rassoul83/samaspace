@@ -16,17 +16,18 @@ function formatFCFA(n) {
 
 export default function SpaceCard({ space, matchScore }) {
   const gradient = PLACEHOLDER_GRADIENTS[space.nom ? space.nom.length % PLACEHOLDER_GRADIENTS.length : 0];
+  const photo = space.photos?.[0] || space.image || null;
 
   return (
     <Link
       to={`/espaces/${space.id}`}
       className="card overflow-hidden group hover:border-nuit/25 transition-colors block"
     >
-      <div className={`relative h-40 overflow-hidden flex items-end p-3 ${!space.image ? `bg-gradient-to-br ${gradient}` : ""}`}>
-        {space.image && (
+      <div className={`relative h-40 overflow-hidden flex items-end p-3 ${!photo ? `bg-gradient-to-br ${gradient}` : ""}`}>
+        {photo && (
           <>
             <img
-              src={space.image}
+              src={photo}
               alt={space.nom}
               className="absolute inset-0 w-full h-full object-cover"
             />
