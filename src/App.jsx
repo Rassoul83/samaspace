@@ -45,7 +45,7 @@ export default function App() {
           <Route path="/espace-proprietaire" element={<ProtectedRoute role="proprietaire"><EspaceProprietaire /></ProtectedRoute>} />
           <Route path="/ajouter-espace" element={<ProtectedRoute role="proprietaire"><AjouterEspace /></ProtectedRoute>} />
           <Route path="/modifier-espace/:id" element={<ProtectedRoute role="proprietaire"><ModifierEspace /></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute role="admin"><Admin /></ProtectedRoute>} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
