@@ -16,10 +16,21 @@ service cloud.firestore {
       allow update: if estProprio(uid);
     }
 
+    function prixValide(data) {
+      return data.prixHeure is number && data.prixHeure > 0
+          && data.prixJournee is number && data.prixJournee > 0;
+    }
+    function capaciteValide(data) {
+      return data.capacite is int && data.capacite > 0;
+    }
+
     // Espaces : lecture publique, écriture réservée au propriétaire de la fiche
     match /espaces/{espaceId} {
       allow read: if true;
-      allow create: if estConnecte() && request.resource.data.proprietaireId == request.auth.uid;
+      allow create: if estConnecte()
+          && request.resource.data.proprietaireId == request.auth.uid
+          && prixValide(request.resource.data)
+          && capaciteValide(request.resource.data);
       allow update, delete: if estConnecte() && resource.data.proprietaireId == request.auth.uid;
     }
 

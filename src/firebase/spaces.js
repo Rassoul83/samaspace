@@ -73,6 +73,13 @@ export async function listBookingsByOwner(ownerId) {
 }
 
 export async function updateBookingStatus(id, statut) {
+  if (statut === "confirmee") {
+    const snap = await getDoc(doc(db, BOOKINGS, id));
+    const booking = snap.data();
+    if (booking?.clientId && booking.clientId === booking.proprietaireId) {
+      throw new Error("Auto-réservation interdite : le client et le propriétaire sont le même compte.");
+    }
+  }
   return updateDoc(doc(db, BOOKINGS, id), { statut });
 }
 
