@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { listSpacesByOwner, listBookingsByOwner, updateBookingStatus } from "../firebase/spaces";
+import { listSpacesByOwner, listBookingsByOwner, updateBookingStatus, deleteSpace } from "../firebase/spaces";
 import VerifiedBadge from "../components/VerifiedBadge";
 
 export default function EspaceProprietaire() {
@@ -15,6 +15,12 @@ export default function EspaceProprietaire() {
     listSpacesByOwner(user.uid).then(setEspaces).catch(() => {});
     listBookingsByOwner(user.uid).then(setDemandes).catch(() => {});
   }, [user]);
+
+  async function supprimer(id) {
+    if (!window.confirm("Supprimer cet espace ? Cette action est irréversible.")) return;
+    await deleteSpace(id);
+    setEspaces((prev) => prev.filter((e) => e.id !== id));
+  }
 
   async function repondre(id, statut) {
     await updateBookingStatus(id, statut);
@@ -95,6 +101,14 @@ export default function EspaceProprietaire() {
               </div>
               <p className="text-sm text-encre/60 mt-1">{e.quartier}, {e.ville}</p>
               {!e.verifie && <p className="text-xs text-ocre-600 mt-2">Vérification en attente</p>}
+              <div className="flex gap-2 mt-4 pt-3 border-t border-nuit/10">
+                <Link to={`/modifier-espace/${e.id}`} className="btn-outline text-xs py-1.5 flex-1 text-center">
+                  Modifier
+                </Link>
+                <button onClick={() => supprimer(e.id)} className="btn-outline text-xs py-1.5 flex-1 text-red-600 border-red-200 hover:bg-red-50">
+                  Supprimer
+                </button>
+              </div>
             </div>
           ))}
         </div>

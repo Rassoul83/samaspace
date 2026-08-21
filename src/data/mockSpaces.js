@@ -16,7 +16,7 @@ export const MOCK_SPACES = [
     verifie: true,
     note: 4.8,
     nombreAvis: 23,
-    image: "photo-1497366216548-37526070297c",
+    image: "https://images.unsplash.com/photo-1744095407215-66e40734e23a?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "demo-2",
@@ -33,7 +33,7 @@ export const MOCK_SPACES = [
     verifie: true,
     note: 4.9,
     nombreAvis: 41,
-    image: "photo-1519167758481-83f550bb49b3",
+    image: "https://images.unsplash.com/photo-1729808641871-8d8b5ade6bbe?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "demo-3",
@@ -50,7 +50,7 @@ export const MOCK_SPACES = [
     verifie: false,
     note: 4.5,
     nombreAvis: 9,
-    image: "photo-1497215728101-856f4ea42174",
+    image: "https://images.unsplash.com/photo-1716703373229-b0e43de7dd5c?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "demo-4",
@@ -67,6 +67,6 @@ export const MOCK_SPACES = [
     verifie: true,
     note: 4.7,
     nombreAvis: 17,
-    image: "photo-1519225421980-715cb0215aed",
+    image: "https://images.unsplash.com/photo-1785300674635-253672fa7282?auto=format&fit=crop&w=800&q=80",
   },
 ];

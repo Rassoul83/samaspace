@@ -21,7 +21,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 bg-sable-100/90 backdrop-blur border-b border-nuit/10">
       <div className="container-page flex items-center justify-between h-16">
         <Link to="/" className="shrink-0">
-          <img src="/samaspace-logo-full.png" alt="SamaSpace" className="h-8 w-auto" />
+          <img src="/samaspace-logo-full.png" alt="SamaSpace" className="h-10 w-auto" />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">

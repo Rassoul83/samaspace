@@ -13,6 +13,7 @@ import Inscription from "./pages/Inscription";
 import EspaceClient from "./pages/EspaceClient";
 import EspaceProprietaire from "./pages/EspaceProprietaire";
 import AjouterEspace from "./pages/AjouterEspace";
+import ModifierEspace from "./pages/ModifierEspace";
 import Admin from "./pages/Admin";
 import CommentCaMarche from "./pages/CommentCaMarche";
 import DevenirProprietaire from "./pages/DevenirProprietaire";
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/espace-client" element={<ProtectedRoute role="client"><EspaceClient /></ProtectedRoute>} />
           <Route path="/espace-proprietaire" element={<ProtectedRoute role="proprietaire"><EspaceProprietaire /></ProtectedRoute>} />
           <Route path="/ajouter-espace" element={<ProtectedRoute role="proprietaire"><AjouterEspace /></ProtectedRoute>} />
+          <Route path="/modifier-espace/:id" element={<ProtectedRoute role="proprietaire"><ModifierEspace /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
 
           <Route path="*" element={<NotFound />} />

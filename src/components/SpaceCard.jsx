@@ -22,7 +22,17 @@ export default function SpaceCard({ space, matchScore }) {
       to={`/espaces/${space.id}`}
       className="card overflow-hidden group hover:border-nuit/25 transition-colors block"
     >
-      <div className={`relative h-40 bg-gradient-to-br ${gradient} flex items-end p-3`}>
+      <div className={`relative h-40 overflow-hidden flex items-end p-3 ${!space.image ? `bg-gradient-to-br ${gradient}` : ""}`}>
+        {space.image && (
+          <>
+            <img
+              src={space.image}
+              alt={space.nom}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-nuit/65 to-transparent" />
+          </>
+        )}
         {space.verifie && (
           <div className="absolute top-3 left-3">
             <VerifiedBadge />
@@ -33,7 +43,7 @@ export default function SpaceCard({ space, matchScore }) {
             <MatchScore score={matchScore} compact />
           </div>
         )}
-        <span className="font-display text-sable text-lg italic leading-tight drop-shadow-sm">
+        <span className="relative font-display text-sable text-lg italic leading-tight drop-shadow-sm">
           {space.nom}
         </span>
       </div>

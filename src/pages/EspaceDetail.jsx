@@ -49,8 +49,24 @@ export default function EspaceDetail() {
     <div className="container-page py-10">
       <div className="grid lg:grid-cols-[1fr_360px] gap-10">
         <div>
-          <div className="h-72 rounded-lg bg-gradient-to-br from-nuit to-atlan-600 mb-6 flex items-end p-6">
-            {space.verifie && <VerifiedBadge size="md" />}
+          <div className="relative h-72 rounded-lg overflow-hidden mb-6 flex items-end p-6">
+            {space.image ? (
+              <>
+                <img
+                  src={space.image}
+                  alt={space.nom}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-nuit/50 to-transparent" />
+              </>
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-nuit to-atlan-600" />
+            )}
+            {space.verifie && (
+              <div className="relative">
+                <VerifiedBadge size="md" />
+              </div>
+            )}
           </div>
 
           <div className="flex items-start justify-between gap-4 mb-1">
