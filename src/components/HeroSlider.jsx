@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const SLIDES = [
   {
-    image: "https://images.unsplash.com/photo-1576073459656-9b03ee75cc92?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1744095407215-66e40734e23a?auto=format&fit=crop&w=1600&q=80",
     label: "Formations & réunions",
     text: "Des salles équipées pour vos formations, séminaires et réunions d'entreprise.",
   },
@@ -12,7 +12,7 @@ const SLIDES = [
     text: "Des espaces vérifiés pour vos mariages, cocktails et événements d'envergure.",
   },
   {
-    image: "https://images.unsplash.com/photo-1754982905667-f3f62cfb002d?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1716703373229-b0e43de7dd5c?auto=format&fit=crop&w=1600&q=80",
     label: "Coworking & ateliers",
     text: "Des lieux flexibles pour travailler, collaborer ou organiser un atelier.",
   },
