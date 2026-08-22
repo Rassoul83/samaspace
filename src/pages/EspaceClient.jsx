@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Heart, CalendarDays } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { listBookingsByClient, listFavorites, getSpace } from "../firebase/spaces";
 import SpaceCard from "../components/SpaceCard";
@@ -28,6 +30,15 @@ export default function EspaceClient() {
     <div className="container-page py-10">
       <p className="eyebrow mb-1">Espace client</p>
       <h1 className="text-3xl font-display text-nuit mb-8">Bonjour {profile?.nom || user?.displayName} 👋</h1>
+
+      <nav className="flex gap-1 mb-8 border-b border-nuit/10 -mx-1 px-1">
+        <span className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium text-nuit border-b-2 border-nuit -mb-px">
+          <CalendarDays size={15} /> Mes demandes
+        </span>
+        <Link to="/favoris" className="flex items-center gap-1.5 px-3 py-2.5 text-sm text-encre/60 hover:text-nuit transition-colors border-b-2 border-transparent -mb-px">
+          <Heart size={15} /> Mes favoris
+        </Link>
+      </nav>
 
       <div className="grid md:grid-cols-3 gap-5 mb-10">
         <div className="card p-5">
