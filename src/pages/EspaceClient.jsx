@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { listBookingsByClient } from "../firebase/spaces";
+import { listBookingsByClient, listFavorites, getSpace } from "../firebase/spaces";
+import SpaceCard from "../components/SpaceCard";
 
 const STATUTS = {
   en_attente: { label: "En attente", cls: "bg-ocre/20 text-ocre-600" },
@@ -12,9 +13,15 @@ const STATUTS = {
 export default function EspaceClient() {
   const { user, profile } = useAuth();
   const [reservations, setReservations] = useState([]);
+  const [favorisEspaces, setFavorisEspaces] = useState([]);
 
   useEffect(() => {
-    if (user) listBookingsByClient(user.uid).then(setReservations).catch(() => {});
+    if (!user) return;
+    listBookingsByClient(user.uid).then(setReservations).catch(() => {});
+    listFavorites(user.uid)
+      .then((favs) => Promise.all(favs.map((f) => getSpace(f.spaceId))))
+      .then((espaces) => setFavorisEspaces(espaces.filter(Boolean)))
+      .catch(() => {});
   }, [user]);
 
   return (
@@ -33,7 +40,7 @@ export default function EspaceClient() {
         </div>
         <div className="card p-5">
           <p className="text-xs text-nuit-400 uppercase tracking-wide mb-1">Favoris</p>
-          <p className="text-3xl font-display text-nuit">0</p>
+          <p className="text-3xl font-display text-nuit">{favorisEspaces.length}</p>
         </div>
       </div>
 
@@ -54,6 +61,19 @@ export default function EspaceClient() {
                 {STATUTS[r.statut]?.label || r.statut}
               </span>
             </div>
+          ))}
+        </div>
+      )}
+
+      <h2 className="font-display text-xl text-nuit mt-10 mb-4">Mes favoris</h2>
+      {favorisEspaces.length === 0 ? (
+        <div className="card p-8 text-center text-encre/50">
+          Aucun favori pour l'instant. <a href="/recherche" className="text-atlan-600 font-medium">Explorez les espaces</a>.
+        </div>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {favorisEspaces.map((espace) => (
+            <SpaceCard key={espace.id} space={espace} />
           ))}
         </div>
       )}
