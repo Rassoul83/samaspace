@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const SLIDES = [
   {
-    image: "https://images.unsplash.com/photo-1744095407215-66e40734e23a?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1771270759486-1f7703945072?auto=format&fit=crop&w=1600&q=80",
     label: "Formations & réunions",
     text: "Des salles équipées pour vos formations, séminaires et réunions d'entreprise.",
   },
