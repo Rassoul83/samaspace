@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 const SLIDES = [
   {
     image: "https://images.unsplash.com/photo-1771270759486-1f7703945072?auto=format&fit=crop&w=1600&q=80",
+    objectPosition: "center 70%",
     label: "Formations & réunions",
     text: "Des salles équipées pour vos formations, séminaires et réunions d'entreprise.",
   },
   {
     image: "https://images.unsplash.com/photo-1762765685319-fdaf8d22085d?auto=format&fit=crop&w=1600&q=80",
+    objectPosition: "center 85%",
     label: "Événements & cérémonies",
     text: "Des espaces vérifiés pour vos mariages, cocktails et événements d'envergure.",
   },
@@ -41,6 +43,7 @@ export default function HeroSlider() {
             src={slide.image}
             alt={slide.label}
             className="h-full w-full object-cover"
+            style={slide.objectPosition ? { objectPosition: slide.objectPosition } : undefined}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-nuit-900/85 via-nuit-900/20 to-transparent" />
           <div className="absolute bottom-8 left-6 md:left-10 right-6 md:right-10">
