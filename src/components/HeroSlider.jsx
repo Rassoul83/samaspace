@@ -7,7 +7,7 @@ const SLIDES = [
     text: "Des salles équipées pour vos formations, séminaires et réunions d'entreprise.",
   },
   {
-    image: "https://images.unsplash.com/photo-1763429338698-439aa108e7fb?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1762765685319-fdaf8d22085d?auto=format&fit=crop&w=1600&q=80",
     label: "Événements & cérémonies",
     text: "Des espaces vérifiés pour vos mariages, cocktails et événements d'envergure.",
   },
