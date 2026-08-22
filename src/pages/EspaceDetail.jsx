@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { MapPin, Users, Star, Heart, CheckCircle2 } from "lucide-react";
 import VerifiedBadge from "../components/VerifiedBadge";
-import { getSpace, createBooking, listReviewsBySpace } from "../firebase/spaces";
+import { getSpace, createBooking, listReviewsBySpace, addFavorite, removeFavorite, isFavorite } from "../firebase/spaces";
 import { useAuth } from "../context/AuthContext";
 import { MOCK_SPACES } from "../data/mockSpaces";
 import { CONFIGURATIONS } from "../data/villes";
@@ -19,6 +19,7 @@ export default function EspaceDetail() {
   const [form, setForm] = useState({ date: "", heureDebut: "", duree: "2", participants: "" });
   const [statut, setStatut] = useState(null);
   const [photoActive, setPhotoActive] = useState(null);
+  const [favori, setFavori] = useState(false);
 
   useEffect(() => {
     getSpace(id)
@@ -35,7 +36,23 @@ export default function EspaceDetail() {
     listReviewsBySpace(id).then(setReviews).catch(() => setReviews([]));
   }, [id]);
 
+  useEffect(() => {
+    if (!user) return;
+    isFavorite(user.uid, id).then(setFavori).catch(() => {});
+  }, [user, id]);
+
   if (!space) return <div className="container-page py-20 text-center text-encre/50">Chargement…</div>;
+
+  async function handleFavori() {
+    if (!user) return setStatut("connexion-requise-favori");
+    if (favori) {
+      await removeFavorite(user.uid, space.id).catch(() => {});
+      setFavori(false);
+    } else {
+      await addFavorite(user.uid, space.id).catch(() => {});
+      setFavori(true);
+    }
+  }
 
   async function handleDemande(e) {
     e.preventDefault();
@@ -97,8 +114,13 @@ export default function EspaceDetail() {
 
           <div className="flex items-start justify-between gap-4 mb-1">
             <h1 className="text-3xl font-display text-nuit">{space.nom}</h1>
-            <button className="btn-outline text-sm shrink-0" aria-label="Ajouter aux favoris">
-              <Heart size={16} /> Favoris
+            <button
+              onClick={handleFavori}
+              className={`btn-outline text-sm shrink-0 transition-colors ${favori ? "border-ocre text-ocre" : ""}`}
+              aria-label={favori ? "Retirer des favoris" : "Ajouter aux favoris"}
+            >
+              <Heart size={16} className={favori ? "fill-ocre text-ocre" : ""} />
+              {favori ? "Favori" : "Favoris"}
             </button>
           </div>
           <p className="flex items-center gap-1.5 text-encre/60 text-sm mb-1">
@@ -186,8 +208,8 @@ export default function EspaceDetail() {
                 <input required type="number" min="1" className="input" value={form.participants} onChange={(e) => setForm({ ...form, participants: e.target.value })} />
               </div>
               <button type="submit" className="btn-primary w-full mt-2">Envoyer la demande</button>
-              {statut === "connexion-requise" && (
-                <p className="text-xs text-ocre-600">Connectez-vous pour envoyer une demande de réservation.</p>
+              {(statut === "connexion-requise" || statut === "connexion-requise-favori") && (
+                <p className="text-xs text-ocre-600">Connectez-vous pour effectuer cette action.</p>
               )}
               {statut === "erreur" && (
                 <p className="text-xs text-red-600">Une erreur est survenue, réessayez.</p>

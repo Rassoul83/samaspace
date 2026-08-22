@@ -1,5 +1,5 @@
 import {
-  collection, doc, addDoc, updateDoc, deleteDoc, getDoc, getDocs,
+  collection, doc, addDoc, setDoc, updateDoc, deleteDoc, getDoc, getDocs,
   query, where, orderBy, limit, serverTimestamp,
 } from "firebase/firestore";
 import { db } from "./config";
@@ -7,6 +7,7 @@ import { db } from "./config";
 const SPACES = "espaces";
 const BOOKINGS = "reservations";
 const REVIEWS = "avis";
+const FAVORITES = "favoris";
 
 // --- Espaces ---
 export async function listSpaces(filters = {}) {
@@ -81,6 +82,30 @@ export async function updateBookingStatus(id, statut) {
     }
   }
   return updateDoc(doc(db, BOOKINGS, id), { statut });
+}
+
+// --- Favoris ---
+export async function addFavorite(userId, spaceId) {
+  return setDoc(doc(db, FAVORITES, `${userId}_${spaceId}`), {
+    userId,
+    spaceId,
+    creeLe: serverTimestamp(),
+  });
+}
+
+export async function removeFavorite(userId, spaceId) {
+  return deleteDoc(doc(db, FAVORITES, `${userId}_${spaceId}`));
+}
+
+export async function listFavorites(userId) {
+  const q = query(collection(db, FAVORITES), where("userId", "==", userId), orderBy("creeLe", "desc"));
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
+export async function isFavorite(userId, spaceId) {
+  const snap = await getDoc(doc(db, FAVORITES, `${userId}_${spaceId}`));
+  return snap.exists();
 }
 
 // --- Avis ---

@@ -41,6 +41,12 @@ service cloud.firestore {
       allow update: if estConnecte() && resource.data.proprietaireId == request.auth.uid;
     }
 
+    // Favoris : lecture et écriture réservées au propriétaire du favori
+    match /favoris/{favoriId} {
+      allow read, delete: if estConnecte() && resource.data.userId == request.auth.uid;
+      allow create: if estConnecte() && request.resource.data.userId == request.auth.uid;
+    }
+
     // Avis : lecture publique, création réservée à un client connecté
     match /avis/{avisId} {
       allow read: if true;
