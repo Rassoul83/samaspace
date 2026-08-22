@@ -1,34 +1,35 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const SLIDES = [
   {
-    url: "https://images.unsplash.com/photo-1744095407215-66e40734e23a?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1576073459656-9b03ee75cc92?auto=format&fit=crop&w=1600&q=80",
     label: "Formations & réunions",
-    text: "Des espaces vérifiés, réservables à l'heure ou à la journée, au cœur de Dakar.",
+    text: "Des salles équipées pour vos formations, séminaires et réunions d'entreprise.",
   },
   {
-    url: "https://images.unsplash.com/photo-1762765685319-fdaf8d22085d?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1763429338698-439aa108e7fb?auto=format&fit=crop&w=1600&q=80",
     label: "Événements & cérémonies",
-    text: "Dakar ou Saly : des adresses sur mesure pour vos moments importants.",
-    objectPosition: "center 85%",
+    text: "Des espaces vérifiés pour vos mariages, cocktails et événements d'envergure.",
   },
   {
-    url: "https://images.unsplash.com/photo-1716703373229-b0e43de7dd5c?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1754982905667-f3f62cfb002d?auto=format&fit=crop&w=1600&q=80",
     label: "Coworking & ateliers",
-    text: "Capacité modulable, wifi, équipements vérifiés — tout est prêt avant votre arrivée.",
+    text: "Des lieux flexibles pour travailler, collaborer ou organiser un atelier.",
   },
 ];
 
-export default function HeroSlider({ children }) {
+export default function HeroSlider() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 5000);
-    return () => clearInterval(id);
+    const timer = setInterval(() => {
+      setIndex((i) => (i + 1) % SLIDES.length);
+    }, 5000);
+    return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="relative overflow-hidden min-h-[620px] md:min-h-[700px] flex flex-col border-b border-nuit/20">
+    <div className="relative h-[420px] md:h-[520px] w-full overflow-hidden rounded-lg">
       {SLIDES.map((slide, i) => (
         <div
           key={slide.label}
@@ -37,38 +38,28 @@ export default function HeroSlider({ children }) {
           }`}
         >
           <img
-            src={slide.url}
+            src={slide.image}
             alt={slide.label}
-            className="w-full h-full object-cover"
-            style={slide.objectPosition ? { objectPosition: slide.objectPosition } : undefined}
+            className="h-full w-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-nuit-900/85 via-nuit-900/20 to-transparent" />
+          <div className="absolute bottom-8 left-6 md:left-10 right-6 md:right-10">
+            <p className="eyebrow text-ocre-400 mb-2">{slide.label}</p>
+            <p className="text-sable text-lg md:text-2xl font-display max-w-lg leading-snug">
+              {slide.text}
+            </p>
+          </div>
         </div>
       ))}
 
-      <div className="absolute inset-0 bg-loom opacity-25" />
-      <div className="absolute inset-0 bg-nuit/45" />
-
-      <div className="relative z-10 flex-1 flex flex-col justify-center">
-        {children}
-      </div>
-
-      <div className="absolute bottom-5 left-5 sm:left-8 z-10 max-w-[260px] sm:max-w-xs">
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ocre mb-1">
-          {SLIDES[index].label}
-        </p>
-        <p className="text-sable/70 text-sm font-display leading-snug">
-          {SLIDES[index].text}
-        </p>
-      </div>
-
-      <div className="absolute bottom-6 right-5 sm:right-8 flex gap-2 z-10">
+      <div className="absolute bottom-6 right-6 flex gap-2">
         {SLIDES.map((slide, i) => (
           <button
             key={slide.label}
             onClick={() => setIndex(i)}
             aria-label={`Voir : ${slide.label}`}
             className={`h-2 rounded-full transition-all duration-300 ${
-              i === index ? "w-6 bg-ocre" : "w-2 bg-sable/40 hover:bg-sable/70"
+              i === index ? "w-6 bg-ocre" : "w-2 bg-sable/50 hover:bg-sable/80"
             }`}
           />
         ))}
