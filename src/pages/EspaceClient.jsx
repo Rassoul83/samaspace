@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, CalendarDays } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { listBookingsByClient, listFavorites, getSpace } from "../firebase/spaces";
+import { listBookingsByClient } from "../firebase/spaces";
 
 const STATUTS = {
   en_attente: { label: "En attente", cls: "bg-ocre/20 text-ocre-600" },
@@ -14,15 +14,10 @@ const STATUTS = {
 export default function EspaceClient() {
   const { user, profile } = useAuth();
   const [reservations, setReservations] = useState([]);
-  const [favorisEspaces, setFavorisEspaces] = useState([]);
 
   useEffect(() => {
     if (!user) return;
     listBookingsByClient(user.uid).then(setReservations).catch(() => {});
-    listFavorites(user.uid)
-      .then((favs) => Promise.all(favs.map((f) => getSpace(f.spaceId))))
-      .then((espaces) => setFavorisEspaces(espaces.filter(Boolean)))
-      .catch(() => {});
   }, [user]);
 
   return (
@@ -39,7 +34,7 @@ export default function EspaceClient() {
         </Link>
       </nav>
 
-      <div className="grid md:grid-cols-3 gap-5 mb-10">
+      <div className="grid md:grid-cols-2 gap-5 mb-10">
         <div className="card p-5">
           <p className="text-xs text-nuit-400 uppercase tracking-wide mb-1">Demandes envoyées</p>
           <p className="text-3xl font-display text-nuit">{reservations.length}</p>
@@ -47,10 +42,6 @@ export default function EspaceClient() {
         <div className="card p-5">
           <p className="text-xs text-nuit-400 uppercase tracking-wide mb-1">Confirmées</p>
           <p className="text-3xl font-display text-nuit">{reservations.filter((r) => r.statut === "confirmee").length}</p>
-        </div>
-        <div className="card p-5">
-          <p className="text-xs text-nuit-400 uppercase tracking-wide mb-1">Favoris</p>
-          <p className="text-3xl font-display text-nuit">{favorisEspaces.length}</p>
         </div>
       </div>
 
