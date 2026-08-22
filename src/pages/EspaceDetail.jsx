@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { MapPin, Users, Star, Heart, CheckCircle2 } from "lucide-react";
 import VerifiedBadge from "../components/VerifiedBadge";
 import { getSpace, createBooking, listReviewsBySpace, addFavorite, removeFavorite, isFavorite } from "../firebase/spaces";
+import { getUserProfile } from "../firebase/auth";
+import { sendNewRequestEmail } from "../lib/email";
 import { useAuth } from "../context/AuthContext";
 import { MOCK_SPACES } from "../data/mockSpaces";
 import { CONFIGURATIONS } from "../data/villes";
@@ -66,6 +68,21 @@ export default function EspaceDetail() {
         ...form,
       });
       setStatut("envoyee");
+      if (space.proprietaireId) {
+        getUserProfile(space.proprietaireId).then((proprio) => {
+          if (proprio?.email) {
+            sendNewRequestEmail({
+              to_email: proprio.email,
+              client_nom: user.displayName || profile?.nom || "",
+              espace_nom: space.nom,
+              date: form.date,
+              heure_debut: form.heureDebut,
+              duree: form.duree,
+              participants: form.participants,
+            });
+          }
+        });
+      }
     } catch {
       setStatut("erreur");
     }
