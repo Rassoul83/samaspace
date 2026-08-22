@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Heart } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { logoutUser } from "../firebase/auth";
 
@@ -43,6 +43,9 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-2">
           {user ? (
             <>
+              <Link to="/favoris" className="btn-ghost text-sm px-2.5" aria-label="Mes favoris">
+                <Heart size={16} />
+              </Link>
               <Link to={dashboardLink} className="btn-ghost text-sm">Mon espace</Link>
               <button onClick={logoutUser} className="btn-outline text-sm">Déconnexion</button>
             </>
@@ -69,6 +72,9 @@ export default function Navbar() {
           <div className="pt-3 mt-3 border-t border-nuit/10 flex flex-col gap-2">
             {user ? (
               <>
+                <Link to="/favoris" onClick={() => setOpen(false)} className="btn-ghost text-sm w-full flex items-center gap-2">
+                  <Heart size={15} /> Mes favoris
+                </Link>
                 <Link to={dashboardLink} onClick={() => setOpen(false)} className="btn-ghost text-sm w-full">Mon espace</Link>
                 <button onClick={logoutUser} className="btn-outline text-sm w-full">Déconnexion</button>
               </>

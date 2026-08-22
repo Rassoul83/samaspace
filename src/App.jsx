@@ -11,6 +11,7 @@ import Comparateur from "./pages/Comparateur";
 import Connexion from "./pages/Connexion";
 import Inscription from "./pages/Inscription";
 import EspaceClient from "./pages/EspaceClient";
+import Favoris from "./pages/Favoris";
 import EspaceProprietaire from "./pages/EspaceProprietaire";
 import AjouterEspace from "./pages/AjouterEspace";
 import ModifierEspace from "./pages/ModifierEspace";
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/faq" element={<FAQ />} />
 
           <Route path="/espace-client" element={<ProtectedRoute role="client"><EspaceClient /></ProtectedRoute>} />
+          <Route path="/favoris" element={<ProtectedRoute role="client"><Favoris /></ProtectedRoute>} />
           <Route path="/espace-proprietaire" element={<ProtectedRoute role="proprietaire"><EspaceProprietaire /></ProtectedRoute>} />
           <Route path="/ajouter-espace" element={<ProtectedRoute role="proprietaire"><AjouterEspace /></ProtectedRoute>} />
           <Route path="/modifier-espace/:id" element={<ProtectedRoute role="proprietaire"><ModifierEspace /></ProtectedRoute>} />

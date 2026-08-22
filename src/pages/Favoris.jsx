@@ -1,0 +1,59 @@
+import { useEffect, useState } from "react";
+import { Heart } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { listFavorites, getSpace, removeFavorite } from "../firebase/spaces";
+import SpaceCard from "../components/SpaceCard";
+
+export default function Favoris() {
+  const { user } = useAuth();
+  const [espaces, setEspaces] = useState([]);
+  const [chargement, setChargement] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+    listFavorites(user.uid)
+      .then((favs) => Promise.all(favs.map((f) => getSpace(f.spaceId))))
+      .then((liste) => setEspaces(liste.filter(Boolean)))
+      .catch(() => {})
+      .finally(() => setChargement(false));
+  }, [user]);
+
+  async function handleRetirer(spaceId) {
+    await removeFavorite(user.uid, spaceId).catch(() => {});
+    setEspaces((prev) => prev.filter((e) => e.id !== spaceId));
+  }
+
+  return (
+    <div className="container-page py-10">
+      <p className="eyebrow mb-1">Mon compte</p>
+      <h1 className="text-3xl font-display text-nuit mb-2">Mes favoris</h1>
+      <p className="text-sm text-encre/50 mb-8">{espaces.length} espace{espaces.length !== 1 ? "s" : ""} enregistré{espaces.length !== 1 ? "s" : ""}</p>
+
+      {chargement ? (
+        <p className="text-encre/50">Chargement…</p>
+      ) : espaces.length === 0 ? (
+        <div className="card p-12 text-center">
+          <Heart size={32} className="mx-auto mb-3 text-nuit/20" />
+          <p className="text-encre/50 mb-3">Aucun espace en favori pour l'instant.</p>
+          <a href="/recherche" className="btn-primary text-sm inline-flex">Explorer les espaces</a>
+        </div>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {espaces.map((espace) => (
+            <div key={espace.id} className="relative group">
+              <SpaceCard space={espace} />
+              <button
+                onClick={() => handleRetirer(espace.id)}
+                className="absolute top-3 right-3 z-10 bg-sable-100/90 backdrop-blur-sm border border-nuit/10 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="Retirer des favoris"
+                title="Retirer des favoris"
+              >
+                <Heart size={14} className="fill-ocre text-ocre" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
