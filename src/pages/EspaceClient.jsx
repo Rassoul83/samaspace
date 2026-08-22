@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Heart, CalendarDays } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { listBookingsByClient, listFavorites, getSpace } from "../firebase/spaces";
-import SpaceCard from "../components/SpaceCard";
 
 const STATUTS = {
   en_attente: { label: "En attente", cls: "bg-ocre/20 text-ocre-600" },
@@ -76,18 +75,6 @@ export default function EspaceClient() {
         </div>
       )}
 
-      <h2 className="font-display text-xl text-nuit mt-10 mb-4">Mes favoris</h2>
-      {favorisEspaces.length === 0 ? (
-        <div className="card p-8 text-center text-encre/50">
-          Aucun favori pour l'instant. <a href="/recherche" className="text-atlan-600 font-medium">Explorez les espaces</a>.
-        </div>
-      ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {favorisEspaces.map((espace) => (
-            <SpaceCard key={espace.id} space={espace} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
