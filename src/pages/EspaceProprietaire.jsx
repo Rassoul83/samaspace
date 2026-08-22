@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { listSpacesByOwner, listBookingsByOwner, updateBookingStatus, deleteSpace } from "../firebase/spaces";
+import { getUserProfile } from "../firebase/auth";
+import { sendStatusEmail } from "../lib/email";
 import VerifiedBadge from "../components/VerifiedBadge";
 
 export default function EspaceProprietaire() {
@@ -25,6 +27,20 @@ export default function EspaceProprietaire() {
   async function repondre(id, statut) {
     await updateBookingStatus(id, statut);
     setDemandes((d) => d.map((x) => (x.id === id ? { ...x, statut } : x)));
+    const demande = demandes.find((x) => x.id === id);
+    if (demande?.clientId) {
+      getUserProfile(demande.clientId).then((client) => {
+        if (client?.email) {
+          sendStatusEmail({
+            to_email: client.email,
+            client_nom: client.nom || "",
+            espace_nom: demande.espaceNom,
+            date: demande.date,
+            statut: statut === "confirmee" ? "confirmée" : "refusée",
+          });
+        }
+      });
+    }
   }
 
   const revenusEstimes = demandes
