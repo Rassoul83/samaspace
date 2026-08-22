@@ -8,6 +8,17 @@ const SPACES = "espaces";
 const BOOKINGS = "reservations";
 const REVIEWS = "avis";
 const FAVORITES = "favoris";
+const PARAMS = "parametres";
+
+// --- Paramètres / Hero ---
+export async function getHeroSlides() {
+  const snap = await getDoc(doc(db, PARAMS, "hero"));
+  return snap.exists() ? snap.data().slides ?? null : null;
+}
+
+export async function updateHeroSlides(slides) {
+  return setDoc(doc(db, PARAMS, "hero"), { slides }, { merge: true });
+}
 
 // --- Espaces ---
 export async function listSpaces(filters = {}) {
