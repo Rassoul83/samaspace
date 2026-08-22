@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const SLIDES = [
   {
     image: "https://images.unsplash.com/photo-1771270759486-1f7703945072?auto=format&fit=crop&w=1600&q=80",
-    objectPosition: "center 70%",
+    objectPosition: "center 40%",
     label: "Formations & réunions",
     text: "Des salles équipées pour vos formations, séminaires et réunions d'entreprise.",
   },
