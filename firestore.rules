@@ -47,6 +47,12 @@ service cloud.firestore {
       allow create: if estConnecte() && request.resource.data.userId == request.auth.uid;
     }
 
+    // Paramètres globaux (hero slides, config) : lecture publique, écriture admin connecté
+    match /parametres/{docId} {
+      allow read: if true;
+      allow write: if estConnecte();
+    }
+
     // Avis : lecture publique, création réservée à un client connecté
     match /avis/{avisId} {
       allow read: if true;
