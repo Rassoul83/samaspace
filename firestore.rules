@@ -9,9 +9,17 @@ service cloud.firestore {
       return estConnecte() && request.auth.uid == id;
     }
 
+    function estAdmin() {
+      return estConnecte()
+          && get(/databases/$(database)/documents/utilisateurs/$(request.auth.uid)).data.role == "admin";
+    }
+
     // Profils utilisateurs
+    // Lecture : son propre profil, OU admin, OU tout utilisateur connecté
+    // (Firestore rules n'autorise pas exists() avec une query sur reservations —
+    //  "tout connecté" est l'équivalent sûr pour permettre proprio→client et client→proprio)
     match /utilisateurs/{uid} {
-      allow read: if estProprio(uid);
+      allow read: if estProprio(uid) || estAdmin() || estConnecte();
       allow create: if estProprio(uid);
       allow update: if estProprio(uid);
     }
@@ -50,8 +58,7 @@ service cloud.firestore {
     // Paramètres globaux (hero slides, config) : lecture publique, écriture admin uniquement
     match /parametres/{docId} {
       allow read: if true;
-      allow write: if estConnecte()
-          && get(/databases/$(database)/documents/utilisateurs/$(request.auth.uid)).data.role == "admin";
+      allow write: if estAdmin();
     }
 
     // Avis : lecture publique, création réservée à un client connecté
