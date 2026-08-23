@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getHeroSlides } from "../firebase/spaces";
 
 const SLIDES = [
   {
@@ -22,17 +23,24 @@ const SLIDES = [
 
 export default function HeroSlider() {
   const [index, setIndex] = useState(0);
+  const [slides, setSlides] = useState(SLIDES);
+
+  useEffect(() => {
+    getHeroSlides()
+      .then((s) => { if (s?.length) setSlides(s); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % SLIDES.length);
+      setIndex((i) => (i + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   return (
     <div className="relative h-[420px] md:h-[520px] w-full overflow-hidden rounded-lg">
-      {SLIDES.map((slide, i) => (
+      {slides.map((slide, i) => (
         <div
           key={slide.label}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -56,7 +64,7 @@ export default function HeroSlider() {
       ))}
 
       <div className="absolute bottom-6 right-6 flex gap-2">
-        {SLIDES.map((slide, i) => (
+        {slides.map((slide, i) => (
           <button
             key={slide.label}
             onClick={() => setIndex(i)}
